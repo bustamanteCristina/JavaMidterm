@@ -180,7 +180,6 @@ public class DrugStore {
                 break;
             }
         }
-//        total();
     }
 
     public String searchMed(String name) {
