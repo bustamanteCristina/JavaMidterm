@@ -17,6 +17,7 @@ public class Main {
 //        ds.displayMed();
         String in;
         String in2;
+        Account a = new Account();
         while (true) {
             OUTER:
             while (true) {
@@ -29,44 +30,52 @@ public class Main {
                             break OUTER;
                         }
                         if (in.equals("2")) {
-                            ds.registerCustomer();
+                            a = ds.registerCustomer();
                             break OUTER;
                         } else {
                             System.out.println("invalid input!");
                             break;
                         }
                     case "2":
-                        Account a = ds.loginAccount();
+                        a = ds.loginAccount();
                         if (a.getUsername() != null) {
                             System.out.println(a);
                             break OUTER;
-                        }
+                        } System.out.println("Account not found!");
                     default:
                         System.out.println("Invalid input!");
 
                 }
             }
-            while (true) {
-                String in3 = ds.stringInput("Pres 1 for cough\nPress 2 for alergy\nPress 3 for body pain\nPress 4 for headache\n");
-                switch (in3) {
-                    case "1":
-                        ds.displayMed("cough");
-                        break;
-                    case "2":
-                        ds.displayMed("alergy");
-                        break;
-                    case "3":
-                        ds.displayMed("body pain");
-                        break;
-                    case "4":
-                        ds.displayMed("headache");
-                        break;
-                    default:
-                        System.out.println("invalid input!");
+            if (a instanceof Customer) {
+                //customer
+                while (true) {
+                    String in3 = ds.stringInput("Pres 1 for cough\nPress 2 for alergy\nPress 3 for body pain\nPress 4 for headache\n");
+                    switch (in3) {
+                        case "1":
+                            ds.displayMed("cough");
+                            break;
+                        case "2":
+                            ds.displayMed("alergy");
+                            break;
+                        case "3":
+                            ds.displayMed("body pain");
+                            break;
+                        case "4":
+                            ds.displayMed("headache");
+                            break;
+                        default:
+                            System.out.println("invalid input!");
+                    }
+                    ds.purchase((Customer) a);
                 }
+            } else {
+                //pharmacist
+                System.out.println("pharmacist");
+                
             }
-        }    
-        
+        }
+
     }
 
 }

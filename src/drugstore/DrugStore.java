@@ -48,14 +48,18 @@ public class DrugStore {
         return new Account(uname, pass, fname, lname, age);
     }
 
-    public void registerCustomer() {
+    public Customer registerCustomer() {
         Account a = register();
-        accounts.add(new Customer(a.getUsername(), a.getPassword(), a.getFname(), a.getLname(), a.getAge()));
+        Customer c = new Customer(a.getUsername(), a.getPassword(), a.getFname(), a.getLname(), a.getAge());
+        accounts.add(c);
+        return c;
     }
 
-    public void registerPharmacist() {
+    public Pharmacist registerPharmacist() {
         Account a = register();
-        accounts.add(new Pharmacist(a.getUsername(), a.getPassword(), a.getFname(), a.getLname(), a.getAge()));
+        Pharmacist p = new Pharmacist(a.getUsername(), a.getPassword(), a.getFname(), a.getLname(), a.getAge());
+        accounts.add(p);
+        return p;
     }
 
     public void addMedicine(Medicine m) {
@@ -127,7 +131,6 @@ public class DrugStore {
     
 
     public void inventory() {
-        
         for (Medicine m : medicines) {
             double total = 0;
             int num=0;
@@ -153,10 +156,9 @@ public class DrugStore {
         displayMed();
         while (true) {
             String name = this.stringInput("Medicine Name : ");
-            int i = Integer.parseInt(searchMed(name));
-            if (!"not found!".equals(searchMed(name)) || medicines.get(i).getQuantity() != 0) {
+            if (searchMed(name).getType() != null || searchMed(name).getQuantity() != 0) {
                 int quantity = this.intInput("Quantity : ");
-                Medicine m = medicines.get(i);
+                Medicine m = searchMed(name);
                 if (m.getQuantity() >= quantity) {
                     double discount = m.getPrice() * .20;
                     double price = m.getPrice();
@@ -165,7 +167,7 @@ public class DrugStore {
                         System.out.println("Discount: 20%");
                     }
                     m.setPrice(price);
-                    medicines.get(i).setQuantity(m.getQuantity() - quantity);
+                    searchMed(name).setQuantity(m.getQuantity() - quantity);
                     m.setQuantity(quantity);
                     a.addPurchased(m);
                     System.out.println("Total amount: " + m.getPrice() * quantity);
@@ -182,13 +184,13 @@ public class DrugStore {
         }
     }
 
-    public String searchMed(String name) {
-        for (int i = 0; i < medicines.size(); ++i) {
-            if (medicines.get(i).getMedName().equalsIgnoreCase(name)) {
-                return i + "";
+    public Medicine searchMed(String name) {
+        for (Medicine m: medicines) {
+            if (m.getMedName().equalsIgnoreCase(name)) {
+                return m;
             }
         }
-        return "not found!";
+        return new Medicine();
     }
 
     public Account loginAccount() {
